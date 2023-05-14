@@ -1,8 +1,7 @@
-.padContainer {
+.appContainer {
 	width: 100vw;
 	height: 100vh;
 	display: flex;
-	padding-bottom: 5rem;
 	justify-content: center;
 	align-items: center;
 }

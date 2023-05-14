@@ -3,6 +3,8 @@ import PadCss from "./Pad.module.css";
 
 import * as Tone from "tone";
 
+import Instructions from "../instructions/Instructions.jsx";
+
 const Pad = () => {
 	const [isMouseDown, setIsMouseDown] = useState(false);
 	const [frequency, setFrequency] = useState(0);
@@ -18,18 +20,6 @@ const Pad = () => {
 		const gainNode = new Tone.Gain(0.3).toDestination();
 		chorusRef.current = new Tone.Chorus(10, 5, 0).connect(gainNode).start();
 		synthRef.current = new Tone.Synth().connect(chorusRef.current);
-
-		// add event listeners to the document
-		document.addEventListener("mousedown", handleMouseDown);
-		document.addEventListener("mouseup", handleMouseUp);
-		document.addEventListener("mousemove", handleMouseMove);
-
-		// remove the event listeners
-		return () => {
-			document.removeEventListener("mousedown", handleMouseDown);
-			document.removeEventListener("mouseup", handleMouseUp);
-			document.removeEventListener("mousemove", handleMouseMove);
-		};
 	}, []);
 
 	const handleMouseDown = (e) => {
@@ -38,16 +28,16 @@ const Pad = () => {
 		if (!pad.contains(e.target)) {
 			return;
 		}
+
 		setIsMouseDown(true);
 		// Start the synth with current values and trigger a note
-
-		//current values nout working due to the useState only sets value after mouse down
 		synthRef.current.set({ detune: frequency });
 		chorusRef.current.set({ depth: mousePositionY });
 		synthRef.current.triggerAttack(440);
 	};
 
 	const handleMouseUp = () => {
+		//stop synth on mouse up
 		setIsMouseDown(false);
 		synthRef.current.triggerRelease();
 	};
@@ -55,11 +45,6 @@ const Pad = () => {
 	const handleMouseMove = (e) => {
 		// math for titlt
 		const pad = padRef.current;
-
-		if (!pad.contains(e.target)) {
-			return;
-		}
-
 		const padWidth = pad.offsetWidth;
 		const padHeight = pad.offsetHeight;
 		const centerX = pad.offsetLeft + padWidth / 2;
@@ -77,35 +62,30 @@ const Pad = () => {
 		cursor.style.left = `${e.clientX}px`;
 		cursor.style.top = `${e.clientY}px`;
 
-		if (isMouseDown) {
-			//Handle change on x-axis
+		//Handle change on x-axis
 
-			const clientX = e.clientX;
-			const { left, right } = e.target.getBoundingClientRect();
+		const clientX = e.clientX;
+		const { left, right } = e.target.getBoundingClientRect();
 
-			const positionX = Math.max(
-				0,
-				Math.min(1, (clientX - left) / (right - left))
-			); // Calculate the position from 0 to 1
+		const positionX = Math.max(
+			0,
+			Math.min(1, (clientX - left) / (right - left))
+		); // Calculate the position from 0 to 1
 
-			const value = -2400 + positionX * 4800;
+		const value = -2400 + positionX * 4800;
 
-			setFrequency(value);
-			synthRef.current.set({ detune: frequency });
+		setFrequency(value);
+		synthRef.current.set({ detune: frequency });
 
-			//handle change on Y-axis
+		//handle change on Y-axis
 
-			const clientY = e.clientY;
-			const { top, bottom } = e.target.getBoundingClientRect();
+		const clientY = e.clientY;
+		const { top, bottom } = e.target.getBoundingClientRect();
 
-			const position = Math.max(
-				0,
-				Math.min(1, (clientY - top) / (bottom - top))
-			);
+		const position = Math.max(0, Math.min(1, (clientY - top) / (bottom - top)));
 
-			setMousePositionY(position);
-			chorusRef.current.set({ depth: mousePositionY });
-		}
+		setMousePositionY(position);
+		chorusRef.current.set({ depth: mousePositionY });
 	};
 
 	const handleMouseLeave = () => {
@@ -128,7 +108,8 @@ const Pad = () => {
 	};
 
 	return (
-		<div>
+		<div className={PadCss.padWrapper}>
+			<Instructions></Instructions>
 			<div
 				className={PadCss.pad}
 				ref={padRef}

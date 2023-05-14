@@ -1,11 +1,9 @@
-import "./App.css";
-import CustomCursor from "./components/cutsomCursor/CustomCursor";
+import AppCss from "./App.module.css";
 import PadContainer from "./components/padContainer/padContainer";
 
 function App() {
 	return (
-		<div>
-			{/* <CustomCursor /> */}
+		<div className={AppCss.appContainer}>
 			<PadContainer />
 		</div>
 	);
