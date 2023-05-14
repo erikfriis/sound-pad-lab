@@ -1,0 +1,12 @@
+.container {
+	padding: 3rem;
+	max-width: 500px;
+	width: 90%;
+}
+
+.text {
+	font-size: 1.75rem;
+	font-weight: 700;
+	text-align: center;
+	color: rgb(255, 183, 0);
+}
