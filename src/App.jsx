@@ -1,5 +1,5 @@
 import AppCss from "./App.module.css";
-import PadContainer from "./components/padContainer/padContainer";
+import PadContainer from "./components/padContainer/PadContainer.jsx";
 
 function App() {
 	return (
