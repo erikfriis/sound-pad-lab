@@ -1,6 +1,6 @@
 import Pad from "../pad/Pad";
 
-import padContainerCss from "./padContainer.module.css";
+import padContainerCss from "./PadContainer.module.css";
 
 const PadContainer = () => {
 	return (
